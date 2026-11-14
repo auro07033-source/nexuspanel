@@ -762,30 +762,10 @@
                         Aile Sorgu
                         <span class="method-badge method-get">GET</span>
                     </a>
-                    <a class="sidebar-link" data-endpoint="tc">
-                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0"/></svg>
-                        TC Sorgu
-                        <span class="method-badge method-get">GET</span>
-                    </a>
-                    <a class="sidebar-link" data-endpoint="tcgsm">
-                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
-                        GSM → TC
-                        <span class="method-badge method-post">POST</span>
-                    </a>
-                    <a class="sidebar-link" data-endpoint="gsmtc">
-                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-                        TC → GSM
-                        <span class="method-badge method-post">POST</span>
-                    </a>
                     <a class="sidebar-link" data-endpoint="adsoyad">
                         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         Ad Soyad
                         <span class="method-badge method-post">POST</span>
-                    </a>
-                    <a class="sidebar-link" data-endpoint="pttkodu">
-                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        PTT Posta Kodu
-                        <span class="method-badge method-get">GET</span>
                     </a>
                 </div>
             </aside>
@@ -822,45 +802,6 @@
                     tckn: "49642035070"
                 }
             },
-            tc: {
-                name: "TC Sorgu",
-                method: "GET",
-                baseUrl: "https://nexuspanel-t583.onrender.com/tc.php",
-                pathTemplate: "?tckn={tckn}",
-                description: "TCKN ile kişisel bilgileri (ad soyad, doğum tarihi, nüfus, adres) getirir.",
-                params: [
-                    { name: "tckn", type: "string", required: true, desc: "11 haneli TC Kimlik Numarası", placeholder: "49642035070" }
-                ],
-                example: {
-                    tckn: "49642035070"
-                }
-            },
-            tcgsm: {
-                name: "GSM → TC Sorgu",
-                method: "POST",
-                baseUrl: "https://nexuspanel-t583.onrender.com/tcgsm.php",
-                pathTemplate: "",
-                description: "Telefon numarası üzerinden numaranın sahibinin TCKN bilgisini bulur.",
-                params: [
-                    { name: "gsm", type: "string", required: true, desc: "10 veya 11 haneli GSM numarası (5xx xxx xx xx)", placeholder: "5536653765" }
-                ],
-                example: {
-                    gsm: "5536653765"
-                }
-            },
-            gsmtc: {
-                name: "TC → GSM Sorgu",
-                method: "POST",
-                baseUrl: "https://nexuspanel-t583.onrender.com/gsmtc.php",
-                pathTemplate: "",
-                description: "TCKN üzerinden kişinin kayıtlı telefon numaralarını listeler.",
-                params: [
-                    { name: "tckn", type: "string", required: true, desc: "11 haneli TC Kimlik Numarası", placeholder: "49642035070" }
-                ],
-                example: {
-                    tckn: "49642035070"
-                }
-            },
             adsoyad: {
                 name: "Ad Soyad Sorgu",
                 method: "POST",
@@ -877,23 +818,6 @@
                     ad: "Burhan",
                     soyad: "Yıldırım",
                     il: "van"
-                }
-            },
-            pttkodu: {
-                name: "PTT Posta Kodu",
-                method: "GET",
-                baseUrl: "https://forexservisi.onrender.com/pttkodu.php",
-                pathTemplate: "?il={il}&ilce={ilce}&mahalle={mahalle}",
-                description: "İl, ilçe ve mahalle bilgisiyle PTT posta kodu sorgular.",
-                params: [
-                    { name: "il", type: "string", required: true, desc: "İl adı (büyük harf)", placeholder: "ANKARA" },
-                    { name: "ilce", type: "string", required: true, desc: "İlçe adı (büyük harf)", placeholder: "YENİMAHALLE" },
-                    { name: "mahalle", type: "string", required: true, desc: "Mahalle veya sokak adı", placeholder: "BEŞTEPE" }
-                ],
-                example: {
-                    il: "ANKARA",
-                    ilce: "YENİMAHALLE",
-                    mahalle: "BEŞTEPE"
                 }
             }
         };
