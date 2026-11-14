@@ -1,9 +1,29 @@
 <?php
-// pttkodu.php - Düzeltilmiş Versiyon
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
 
-function apiIstekAt($payload, &$debugInfo) {
-    $url = "https://www.ptt.gov.tr/api/posta-kodu";
-    $ch = curl_init($url);
+// 81 ilin PTT kodu (plaka kodu ile aynı)
+$IL_KODLARI = [
+    "ADANA"=>"1","ADIYAMAN"=>"2","AFYONKARAHİSAR"=>"3","AĞRI"=>"4","AMASYA"=>"5",
+    "ANKARA"=>"6","ANTALYA"=>"7","ARTVİN"=>"8","AYDIN"=>"9","BALIKESİR"=>"10",
+    "BİLECİK"=>"11","BİNGÖL"=>"12","BİTLİS"=>"13","BOLU"=>"14","BURDUR"=>"15",
+    "BURSA"=>"16","ÇANAKKALE"=>"17","ÇANKIRI"=>"18","ÇORUM"=>"19","DENİZLİ"=>"20",
+    "DİYARBAKIR"=>"21","EDİRNE"=>"22","ELAZIĞ"=>"23","ERZİNCAN"=>"24","ERZURUM"=>"25",
+    "ESKİŞEHİR"=>"26","GAZİANTEP"=>"27","GİRESUN"=>"28","GÜMÜŞHANE"=>"29","HAKKARİ"=>"30",
+    "HATAY"=>"31","ISPARTA"=>"32","MERSİN"=>"33","İSTANBUL"=>"34","İZMİR"=>"35",
+    "KARS"=>"36","KASTAMONU"=>"37","KAYSERİ"=>"38","KIRKLARELİ"=>"39","KIRŞEHİR"=>"40",
+    "KOCAELİ"=>"41","KONYA"=>"42","KÜTAHYA"=>"43","MALATYA"=>"44","MANİSA"=>"45",
+    "KAHRAMANMARAŞ"=>"46","MARDİN"=>"47","MUĞLA"=>"48","MUŞ"=>"49","NEVŞEHİR"=>"50",
+    "NİĞDE"=>"51","ORDU"=>"52","RİZE"=>"53","SAKARYA"=>"54","SAMSUN"=>"55",
+    "SİİRT"=>"56","SİNOP"=>"57","SİVAS"=>"58","TEKİRDAĞ"=>"59","TOKAT"=>"60",
+    "TRABZON"=>"61","TUNCELİ"=>"62","ŞANLIURFA"=>"63","UŞAK"=>"64","VAN"=>"65",
+    "YOZGAT"=>"66","ZONGULDAK"=>"67","AKSARAY"=>"68","BAYBURT"=>"69","KARAMAN"=>"70",
+    "KIRIKKALE"=>"71","BATMAN"=>"72","ŞIRNAK"=>"73","BARTIN"=>"74","ARDAHAN"=>"75",
+    "IĞDIR"=>"76","YALOVA"=>"77","KARABÜK"=>"78","KİLİS"=>"79","OSMANİYE"=>"80","DÜZCE"=>"81"
+];
+
+function pttApi($payload) {
+    $ch = curl_init("https://www.ptt.gov.tr/api/posta-kodu");
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_POST => true,
@@ -15,73 +35,79 @@ function apiIstekAt($payload, &$debugInfo) {
             "Referer: https://www.ptt.gov.tr/posta-kodu",
             "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         ],
-        CURLOPT_TIMEOUT => 15,
-        CURLOPT_SSL_VERIFYPEER => false
+        CURLOPT_TIMEOUT => 20,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_ENCODING => ""
     ]);
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $r = curl_exec($ch);
     curl_close($ch);
-
-    $debugInfo[] = [
-        "payload" => $payload,
-        "http_code" => $httpCode,
-        "response_snippet" => substr($response, 0, 100)
-    ];
-
-    return json_decode($response, true);
+    return json_decode($r, true);
 }
 
-$il = $_GET['il'] ?? 'ANKARA';
-$ilce = $_GET['ilce'] ?? 'YENİMAHALLE';
-$mahalle = $_GET['mahalle'] ?? 'BEŞTEPE';
+$il = mb_strtoupper(trim($_GET['il'] ?? ''), 'UTF-8');
+$ilce = mb_strtoupper(trim($_GET['ilce'] ?? ''), 'UTF-8');
+$mahalle = trim($_GET['mahalle'] ?? '');
 
-header('Content-Type: application/json; charset=utf-8');
+if (!$il || !$ilce || !$mahalle) {
+    echo json_encode(["success" => false, "message" => "il, ilce ve mahalle zorunlu."]);
+    exit;
+}
 
-$ilKodu = "6"; // Ankara
-$debugLog = [];
+// Türkçe karakter normalizasyonu için
+$ilNorm = str_replace(["İ","I"], "I", $il);
+$ilKodu = null;
+foreach ($IL_KODLARI as $isim => $kod) {
+    if (str_replace(["İ","I"], "I", $isim) === $ilNorm) {
+        $ilKodu = $kod;
+        break;
+    }
+}
 
-// 1. İlçe kodunu bul
-$ilceler = apiIstekAt(["action" => "ilceler", "il_kodu" => $ilKodu], $debugLog);
+if (!$ilKodu) {
+    echo json_encode(["success" => false, "message" => "İl bulunamadı: $il"]);
+    exit;
+}
+
+// İlçe kodunu bul
+$ilceler = pttApi(["action" => "ilceler", "il_kodu" => $ilKodu]);
+if (!$ilceler) {
+    echo json_encode(["success" => false, "message" => "İlçe listesi alınamadı."]);
+    exit;
+}
+
 $ilceKodu = null;
-
-if ($ilceler) {
-    foreach ($ilceler as $i) {
-        if (mb_strtoupper($i['ad'], 'UTF-8') === mb_strtoupper($ilce, 'UTF-8')) {
-            $ilceKodu = (string) $i['kod']; // KRİTİK DÜZELTME: String'e cast et
-            break;
-        }
+$ilceNorm = str_replace(["İ","I"], "I", $ilce);
+foreach ($ilceler as $i) {
+    if (str_replace(["İ","I"], "I", mb_strtoupper($i['ad'], 'UTF-8')) === $ilceNorm) {
+        $ilceKodu = (string) $i['kod'];
+        break;
     }
 }
 
 if (!$ilceKodu) {
-    echo json_encode(["hata" => "İlçe bulunamadı."], JSON_UNESCAPED_UNICODE);
+    echo json_encode(["success" => false, "message" => "İlçe bulunamadı: $ilce"]);
     exit;
 }
 
-// 2. Posta kodlarını çek (String olarak gönder)
-$postakodlari = apiIstekAt([
-    "action" => "postakodu", 
-    "il_kodu" => $ilKodu, 
-    "ilce_kodu" => (string) $ilceKodu
-], $debugLog);
+// Posta kodlarını çek
+$postakodlari = pttApi([
+    "action" => "postakodu",
+    "il_kodu" => $ilKodu,
+    "ilce_kodu" => $ilceKodu
+]);
 
-if (!$postakodlari) {
-    echo json_encode([
-        "hata" => "Posta kodu verisi alınamadı.",
-        "debug" => $debugLog
-    ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+if (!$postakodlari || !is_array($postakodlari)) {
+    echo json_encode(["success" => false, "message" => "Posta kodu verisi alınamadı."]);
     exit;
 }
 
-// 3. Filtrele
 $aranan = mb_strtoupper(str_replace([" MAH.", " MAH"], "", $mahalle), 'UTF-8');
 $bulunanlar = [];
 
 foreach ($postakodlari as $item) {
-    $itemMahalle = mb_strtoupper(str_replace([" MAH.", " MAH"], "", $item['mahalleAdi']), 'UTF-8');
-    $itemSokak = mb_strtoupper($item['sokakAdi'], 'UTF-8');
-    
-    if (mb_strpos($itemMahalle, $aranan) !== false || mb_strpos($itemSokak, $aranan) !== false) {
+    $m = mb_strtoupper(str_replace([" MAH.", " MAH"], "", $item['mahalleAdi'] ?? ''), 'UTF-8');
+    $s = mb_strtoupper($item['sokakAdi'] ?? '', 'UTF-8');
+    if (mb_strpos($m, $aranan) !== false || mb_strpos($s, $aranan) !== false) {
         $bulunanlar[] = [
             "Mahalle" => $item['mahalleAdi'],
             "Sokak" => $item['sokakAdi'],
@@ -90,11 +116,11 @@ foreach ($postakodlari as $item) {
     }
 }
 
-if (count($bulunanlar) > 0) {
-    echo json_encode(array_slice($bulunanlar, 0, 10), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-} else {
-    echo json_encode([
-        "mesaj" => "Aranan mahalle/sokak bulunamadı.",
-        "toplam_kayit" => count($postakodlari)
-    ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-}
+echo json_encode([
+    "success" => true,
+    "il" => $il,
+    "ilce" => $ilce,
+    "aranan" => $mahalle,
+    "sonuc_sayisi" => count($bulunanlar),
+    "sonuclar" => array_slice($bulunanlar, 0, 20)
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
