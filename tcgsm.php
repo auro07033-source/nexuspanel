@@ -10,13 +10,13 @@ if (strlen($gsm) < 10 || strlen($gsm) > 11) {
     exit;
 }
 
-$ch = curl_init("https://bedavasorgupanel.fit/api/req/tcgsm.php");
+$ch = curl_init("https://bedavasorgupanel.fit/tcgsm.php");  // KÖK DİZİN
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => http_build_query(["gsm" => $gsm]),
     CURLOPT_HTTPHEADER => [
-        "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+        "Content-Type: application/x-www-form-urlencoded",
         "Accept: application/json, text/javascript, */*; q=0.01",
         "X-Requested-With: XMLHttpRequest",
         "Referer: https://bedavasorgupanel.fit/",
@@ -40,10 +40,13 @@ if ($httpCode !== 200) {
     exit;
 }
 
-// Dış API JSON dönüyor, doğrudan geçir
+// JSON dene, olmazsa HTML strip
 $data = json_decode($response, true);
 if (json_last_error() === JSON_ERROR_NONE) {
     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 } else {
-    echo json_encode(["success" => false, "message" => "Geçersiz JSON", "raw" => substr($response, 0, 300)]);
+    echo json_encode([
+        "success" => true,
+        "raw_html" => substr(strip_tags($response), 0, 500)
+    ], JSON_UNESCAPED_UNICODE);
 }
