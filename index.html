@@ -8,703 +8,299 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* ============================================
-           ROOT & RESET
-           ============================================ */
         :root {
-            --gold: #EAB308;
-            --gold-light: #FDE047;
-            --gold-dark: #A16207;
-            --gold-dim: rgba(234, 179, 8, 0.08);
-            --gold-border: rgba(234, 179, 8, 0.2);
-            
-            --bg: #09090B;
-            --bg-card: #111114;
-            --bg-elevated: #18181C;
-            --bg-code: #0C0C0F;
-            --bg-input: #1C1C21;
-            
-            --border: #27272A;
-            --border-hover: #3F3F46;
-            --border-active: #52525B;
-            
-            --text: #FAFAFA;
-            --text-muted: #A1A1AA;
-            --text-dim: #71717A;
-            
-            --green: #22C55E;
-            --red: #EF4444;
-            --blue: #3B82F6;
-            --purple: #A855F7;
-            --orange: #F97316;
-            
+            --gold: #EAB308; --gold-light: #FDE047; --gold-dark: #A16207;
+            --gold-dim: rgba(234, 179, 8, 0.08); --gold-border: rgba(234, 179, 8, 0.2);
+            --bg: #09090B; --bg-card: #111114; --bg-elevated: #18181C;
+            --bg-code: #0C0C0F; --bg-input: #1C1C21;
+            --border: #27272A; --border-hover: #3F3F46; --border-active: #52525B;
+            --text: #FAFAFA; --text-muted: #A1A1AA; --text-dim: #71717A;
+            --green: #22C55E; --red: #EF4444; --blue: #3B82F6;
+            --purple: #A855F7; --orange: #F97316;
             --font-sans: 'Inter', system-ui, sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
-            
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 14px;
-            --radius-xl: 18px;
+            --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px; --radius-xl: 18px;
         }
-
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
         html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
-
         body {
-            font-family: var(--font-sans);
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: var(--font-sans); background: var(--bg); color: var(--text);
+            min-height: 100vh; line-height: 1.6; overflow-x: hidden;
         }
-
         ::selection { background: var(--gold); color: var(--bg); }
-
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; width: 100%; }
 
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            width: 100%;
-        }
-
-        /* ============================================
-           NAVBAR
-           ============================================ */
+        /* NAVBAR */
         .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(9, 9, 11, 0.85);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 0;
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(9, 9, 11, 0.85); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border); padding: 1rem 0;
         }
-
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.125rem;
-            font-weight: 800;
-            color: var(--text);
-            text-decoration: none;
-            letter-spacing: -0.03em;
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 1.125rem; font-weight: 800; color: var(--text);
+            text-decoration: none; letter-spacing: -0.03em;
         }
-
         .logo span { color: var(--gold); }
-
         .nav-tabs {
-            display: flex;
-            gap: 0.25rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 3px;
+            display: flex; gap: 0.25rem; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: var(--radius-md); padding: 3px;
         }
-
         .nav-tab {
-            padding: 0.5rem 1rem;
-            background: transparent;
-            border: none;
-            color: var(--text-dim);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.15s;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            padding: 0.5rem 1rem; background: transparent; border: none;
+            color: var(--text-dim); font-size: 0.8125rem; font-weight: 600;
+            border-radius: var(--radius-sm); cursor: pointer; font-family: inherit;
+            transition: all 0.15s; text-decoration: none;
+            display: flex; align-items: center; gap: 0.5rem;
         }
-
         .nav-tab:hover { color: var(--text-muted); }
-
-        .nav-tab.active {
-            background: var(--bg-elevated);
-            color: var(--gold);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
-
+        .nav-tab.active { background: var(--bg-elevated); color: var(--gold); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
         .nav-tab svg { width: 14px; height: 14px; }
-
         .tg-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 0.875rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            transition: all 0.2s;
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 0.875rem; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: var(--radius-md);
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.8125rem; font-weight: 500; transition: all 0.2s;
         }
-
         .tg-btn:hover { color: var(--gold); border-color: var(--gold-dark); }
         .tg-btn svg { width: 14px; height: 14px; }
 
-        /* ============================================
-           MAIN LAYOUT
-           ============================================ */
+        /* MAIN LAYOUT */
         .main-layout {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            gap: 2rem;
-            padding: 2rem 0 4rem;
-            align-items: start;
+            display: grid; grid-template-columns: 260px 1fr;
+            gap: 2rem; padding: 2rem 0 4rem; align-items: start;
         }
-
-        /* SIDEBAR */
         .sidebar {
-            position: sticky;
-            top: 90px;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+            position: sticky; top: 90px;
+            display: flex; flex-direction: column; gap: 1.5rem;
         }
-
-        .sidebar-section {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
+        .sidebar-section { display: flex; flex-direction: column; gap: 0.25rem; }
         .sidebar-title {
-            font-size: 0.6875rem;
-            font-weight: 700;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            padding: 0 0.75rem;
-            margin-bottom: 0.5rem;
-            font-family: var(--font-mono);
+            font-size: 0.6875rem; font-weight: 700; color: var(--text-dim);
+            text-transform: uppercase; letter-spacing: 0.1em;
+            padding: 0 0.75rem; margin-bottom: 0.5rem; font-family: var(--font-mono);
         }
-
         .sidebar-link {
-            display: flex;
-            align-items: center;
-            gap: 0.625rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: var(--radius-sm);
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            transition: all 0.15s;
-            cursor: pointer;
-            border: 1px solid transparent;
+            display: flex; align-items: center; gap: 0.625rem;
+            padding: 0.5rem 0.75rem; border-radius: var(--radius-sm);
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.8125rem; font-weight: 500; transition: all 0.15s;
+            cursor: pointer; border: 1px solid transparent;
         }
-
-        .sidebar-link:hover {
-            background: var(--bg-card);
-            color: var(--text);
-        }
-
+        .sidebar-link:hover { background: var(--bg-card); color: var(--text); }
         .sidebar-link.active {
-            background: var(--gold-dim);
-            color: var(--gold);
-            border-color: var(--gold-border);
+            background: var(--gold-dim); color: var(--gold); border-color: var(--gold-border);
         }
-
         .sidebar-link svg { width: 14px; height: 14px; flex-shrink: 0; }
-
         .method-badge {
-            font-size: 0.625rem;
-            font-weight: 700;
-            padding: 0.125rem 0.375rem;
-            border-radius: 3px;
-            font-family: var(--font-mono);
-            letter-spacing: 0.05em;
-            margin-left: auto;
+            font-size: 0.625rem; font-weight: 700; padding: 0.125rem 0.375rem;
+            border-radius: 3px; font-family: var(--font-mono);
+            letter-spacing: 0.05em; margin-left: auto;
         }
-
         .method-post { background: rgba(34, 197, 94, 0.15); color: var(--green); }
         .method-get { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
 
-        /* İçerik Alanı */
-        .content-area {
-            min-width: 0;
-        }
-
-        /* API Header */
+        .content-area { min-width: 0; }
         .api-header {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 1.75rem;
-            margin-bottom: 1.5rem;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 1.75rem; margin-bottom: 1.5rem;
         }
-
         .api-title-row {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-            flex-wrap: wrap;
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-bottom: 0.75rem; flex-wrap: wrap;
         }
-
-        .api-title-row h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
+        .api-title-row h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
         .api-title-row .method-badge {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.625rem;
-            margin-left: 0;
+            font-size: 0.75rem; padding: 0.25rem 0.625rem; margin-left: 0;
         }
-
-        .api-desc {
-            color: var(--text-muted);
-            font-size: 0.9375rem;
-            margin-bottom: 1.25rem;
-            max-width: 720px;
-        }
-
+        .api-desc { color: var(--text-muted); font-size: 0.9375rem; margin-bottom: 1.25rem; max-width: 720px; }
         .api-url-box {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--bg-code);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 0.75rem 1rem;
-            font-family: var(--font-mono);
-            font-size: 0.8125rem;
-            overflow-x: auto;
+            display: flex; align-items: center; gap: 0.5rem;
+            background: var(--bg-code); border: 1px solid var(--border);
+            border-radius: var(--radius-md); padding: 0.75rem 1rem;
+            font-family: var(--font-mono); font-size: 0.8125rem; overflow-x: auto;
         }
-
         .api-url-box .base { color: var(--text-dim); }
         .api-url-box .path { color: var(--gold); }
-        .api-url-box .param { color: var(--blue); }
-        
         .copy-btn {
-            margin-left: auto;
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-dim);
-            padding: 0.375rem 0.625rem;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 0.6875rem;
-            font-weight: 600;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 0.375rem;
-            transition: all 0.15s;
-            flex-shrink: 0;
+            margin-left: auto; background: transparent; border: 1px solid var(--border);
+            color: var(--text-dim); padding: 0.375rem 0.625rem;
+            border-radius: var(--radius-sm); cursor: pointer;
+            font-size: 0.6875rem; font-weight: 600; font-family: inherit;
+            display: flex; align-items: center; gap: 0.375rem;
+            transition: all 0.15s; flex-shrink: 0;
         }
-
         .copy-btn:hover { color: var(--gold); border-color: var(--gold-dark); }
         .copy-btn svg { width: 12px; height: 12px; }
 
-        /* İnteraktif Sorgu Bölümü */
         .interactive-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            margin-bottom: 1.5rem;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1.5rem;
         }
-
         .section-tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border);
-            background: var(--bg-elevated);
+            display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated);
         }
-
         .section-tab {
-            padding: 0.875rem 1.5rem;
-            background: transparent;
-            border: none;
-            color: var(--text-dim);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-            border-bottom: 2px solid transparent;
-            transition: all 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            padding: 0.875rem 1.5rem; background: transparent; border: none;
+            color: var(--text-dim); font-size: 0.8125rem; font-weight: 600;
+            cursor: pointer; font-family: inherit; border-bottom: 2px solid transparent;
+            transition: all 0.15s; display: flex; align-items: center; gap: 0.5rem;
         }
-
         .section-tab:hover { color: var(--text-muted); }
-
         .section-tab.active {
-            color: var(--gold);
-            border-bottom-color: var(--gold);
-            background: var(--bg-card);
+            color: var(--gold); border-bottom-color: var(--gold); background: var(--bg-card);
         }
-
         .section-tab svg { width: 14px; height: 14px; }
 
-        /* Panel içerikleri */
         .panel { padding: 1.75rem; display: none; }
         .panel.active { display: block; }
-
-        /* Test Formu */
-        .test-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .form-field {
-            display: flex;
-            flex-direction: column;
-            gap: 0.375rem;
-        }
-
+        .test-form { display: flex; flex-direction: column; gap: 1rem; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-field { display: flex; flex-direction: column; gap: 0.375rem; }
         .form-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 0.375rem;
+            font-size: 0.75rem; font-weight: 600; color: var(--text-muted);
+            display: flex; align-items: center; gap: 0.375rem;
         }
-
-        .form-label .required {
-            color: var(--red);
-            font-size: 0.75rem;
-        }
-
+        .form-label .required { color: var(--red); font-size: 0.75rem; }
         .form-label .type-hint {
-            color: var(--text-dim);
-            font-family: var(--font-mono);
-            font-size: 0.6875rem;
-            font-weight: 400;
-            margin-left: auto;
+            color: var(--text-dim); font-family: var(--font-mono);
+            font-size: 0.6875rem; font-weight: 400; margin-left: auto;
         }
-
         .form-input {
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 0.625rem 0.875rem;
-            color: var(--text);
-            font-size: 0.875rem;
-            font-family: var(--font-mono);
-            outline: none;
-            transition: border-color 0.15s;
-            width: 100%;
+            background: var(--bg-input); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); padding: 0.625rem 0.875rem;
+            color: var(--text); font-size: 0.875rem; font-family: var(--font-mono);
+            outline: none; transition: border-color 0.15s; width: 100%;
         }
-
         .form-input:focus { border-color: var(--gold); }
         .form-input::placeholder { color: var(--text-dim); font-family: var(--font-sans); }
-
         .form-actions {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            justify-content: flex-end;
-            padding-top: 0.5rem;
-            flex-wrap: wrap;
+            display: flex; gap: 0.5rem; align-items: center;
+            justify-content: flex-end; padding-top: 0.5rem; flex-wrap: wrap;
         }
-
         .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.625rem 1.125rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            font-family: inherit;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.15s;
-            border: 1px solid var(--border);
-            background: var(--bg-elevated);
-            color: var(--text-muted);
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.625rem 1.125rem; border-radius: var(--radius-sm);
+            font-size: 0.8125rem; font-weight: 600; font-family: inherit;
+            cursor: pointer; text-decoration: none; transition: all 0.15s;
+            border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-muted);
         }
-
         .btn:hover { color: var(--text); border-color: var(--border-hover); }
         .btn svg { width: 14px; height: 14px; }
-
         .btn-primary {
             background: linear-gradient(135deg, var(--gold-light), var(--gold));
-            color: var(--bg);
-            border-color: transparent;
-            font-weight: 700;
+            color: var(--bg); border-color: transparent; font-weight: 700;
         }
+        .btn-primary:hover { color: var(--bg); box-shadow: 0 0 24px -8px rgba(234, 179, 8, 0.5); transform: translateY(-1px); }
 
-        .btn-primary:hover {
-            color: var(--bg);
-            box-shadow: 0 0 24px -8px rgba(234, 179, 8, 0.5);
-            transform: translateY(-1px);
-        }
-
-        /* Cevap / Console */
         .console-wrap {
-            margin-top: 1.5rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            background: var(--bg-code);
+            margin-top: 1.5rem; border: 1px solid var(--border);
+            border-radius: var(--radius-md); overflow: hidden; background: var(--bg-code);
         }
-
         .console-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.625rem 1rem;
-            background: var(--bg-elevated);
-            border-bottom: 1px solid var(--border);
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            font-family: var(--font-mono);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.625rem 1rem; background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border); font-size: 0.75rem;
+            color: var(--text-dim); font-family: var(--font-mono);
         }
-
-        .console-status {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
+        .console-status { display: flex; align-items: center; gap: 0.5rem; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; }
         .status-dot.idle { background: var(--text-dim); }
         .status-dot.success { background: var(--green); box-shadow: 0 0 8px var(--green); }
         .status-dot.error { background: var(--red); box-shadow: 0 0 8px var(--red); }
-        .status-dot.loading {
-            background: var(--gold);
-            box-shadow: 0 0 8px var(--gold);
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
+        .status-dot.loading { background: var(--gold); box-shadow: 0 0 8px var(--gold); animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
         .console-body {
-            padding: 1rem;
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            line-height: 1.7;
-            color: var(--text-muted);
-            max-height: 400px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-break: break-all;
+            padding: 1rem; font-family: var(--font-mono); font-size: 0.75rem;
+            line-height: 1.7; color: var(--text-muted); max-height: 400px;
+            overflow-y: auto; white-space: pre-wrap; word-break: break-all;
         }
-
-        /* JSON syntax highlighting */
         .json-key { color: var(--gold-light); }
         .json-string { color: var(--green); }
         .json-number { color: var(--blue); }
         .json-boolean { color: var(--purple); }
         .json-null { color: var(--text-dim); }
 
-        /* Kod Örneği Bölümü */
         .code-tabs {
-            display: flex;
-            gap: 0.25rem;
-            padding: 0 1.75rem;
-            border-bottom: 1px solid var(--border);
-            background: var(--bg-elevated);
-            overflow-x: auto;
+            display: flex; gap: 0.25rem; padding: 0 1.75rem;
+            border-bottom: 1px solid var(--border); background: var(--bg-elevated); overflow-x: auto;
         }
-
         .code-tab {
-            padding: 0.625rem 0.875rem;
-            background: transparent;
-            border: none;
-            color: var(--text-dim);
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-mono);
-            border-bottom: 2px solid transparent;
-            transition: all 0.15s;
-            white-space: nowrap;
+            padding: 0.625rem 0.875rem; background: transparent; border: none;
+            color: var(--text-dim); font-size: 0.75rem; font-weight: 600;
+            cursor: pointer; font-family: var(--font-mono);
+            border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap;
         }
-
         .code-tab:hover { color: var(--text-muted); }
-
-        .code-tab.active {
-            color: var(--gold);
-            border-bottom-color: var(--gold);
-        }
-
+        .code-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
         .code-block {
-            background: var(--bg-code);
-            padding: 1.5rem 1.75rem;
-            font-family: var(--font-mono);
-            font-size: 0.8125rem;
-            line-height: 1.8;
-            color: var(--text-muted);
-            overflow-x: auto;
-            white-space: pre;
-            display: none;
+            background: var(--bg-code); padding: 1.5rem 1.75rem;
+            font-family: var(--font-mono); font-size: 0.8125rem; line-height: 1.8;
+            color: var(--text-muted); overflow-x: auto; white-space: pre; display: none;
         }
-
         .code-block.active { display: block; }
-
         .code-block .kw { color: var(--purple); }
         .code-block .str { color: var(--green); }
         .code-block .fn { color: var(--blue); }
         .code-block .cm { color: var(--text-dim); font-style: italic; }
         .code-block .num { color: var(--orange); }
 
-        /* Parametre Tablosu */
         .params-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            font-size: 0.8125rem;
+            width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.8125rem;
         }
-
         .params-table th {
-            text-align: left;
-            padding: 0.75rem 1rem;
-            font-size: 0.6875rem;
-            font-weight: 700;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            border-bottom: 1px solid var(--border);
-            font-family: var(--font-mono);
-            background: var(--bg-elevated);
+            text-align: left; padding: 0.75rem 1rem; font-size: 0.6875rem;
+            font-weight: 700; color: var(--text-dim); text-transform: uppercase;
+            letter-spacing: 0.08em; border-bottom: 1px solid var(--border);
+            font-family: var(--font-mono); background: var(--bg-elevated);
         }
-
-        .params-table td {
-            padding: 0.875rem 1rem;
-            border-bottom: 1px solid var(--border);
-            vertical-align: top;
-        }
-
+        .params-table td { padding: 0.875rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
         .params-table tbody tr:last-child td { border-bottom: none; }
+        .param-name { font-family: var(--font-mono); font-weight: 600; color: var(--gold-light); font-size: 0.8125rem; }
+        .param-type { font-family: var(--font-mono); font-size: 0.75rem; color: var(--blue); }
+        .param-required { font-size: 0.625rem; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 0.05em; margin-left: 0.375rem; }
+        .param-desc { color: var(--text-muted); font-size: 0.8125rem; }
 
-        .param-name {
-            font-family: var(--font-mono);
-            font-weight: 600;
-            color: var(--gold-light);
-            font-size: 0.8125rem;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .panel.active > * { animation: fadeIn 0.25s ease-out; }
 
-        .param-type {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: var(--blue);
-        }
-
-        .param-required {
-            font-size: 0.625rem;
-            font-weight: 700;
-            color: var(--red);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-left: 0.375rem;
-        }
-
-        .param-desc {
-            color: var(--text-muted);
-            font-size: 0.8125rem;
-        }
-
-        /* Animasyonlar */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .panel.active > * {
-            animation: fadeIn 0.25s ease-out;
-        }
-
-        /* Toast */
         .toast-container {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 1000;
+            display: flex; flex-direction: column; gap: 0.5rem;
         }
-
         .toast {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 0.75rem 1rem;
-            font-size: 0.8125rem;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 0.625rem;
+            background: var(--bg-elevated); border: 1px solid var(--border);
+            border-radius: var(--radius-md); padding: 0.75rem 1rem;
+            font-size: 0.8125rem; color: var(--text);
+            display: flex; align-items: center; gap: 0.625rem;
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-            animation: slideIn 0.3s ease-out;
-            min-width: 240px;
+            animation: slideIn 0.3s ease-out; min-width: 240px;
         }
-
         .toast.success { border-color: rgba(34, 197, 94, 0.3); }
         .toast.error { border-color: rgba(239, 68, 68, 0.3); }
-
         .toast svg { width: 16px; height: 16px; flex-shrink: 0; }
         .toast.success svg { color: var(--green); }
         .toast.error svg { color: var(--red); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
         @media (max-width: 1024px) {
             .main-layout { grid-template-columns: 1fr; }
             .sidebar {
-                position: static;
-                flex-direction: row;
-                overflow-x: auto;
-                gap: 0.75rem;
-                padding-bottom: 0.5rem;
-                border-bottom: 1px solid var(--border);
-                padding: 0 0 1rem 0;
+                position: static; flex-direction: row; overflow-x: auto;
+                gap: 0.75rem; padding-bottom: 0.5rem;
+                border-bottom: 1px solid var(--border); padding: 0 0 1rem 0;
             }
-            .sidebar-section {
-                flex-direction: row;
-                flex-shrink: 0;
-            }
+            .sidebar-section { flex-direction: row; flex-shrink: 0; }
             .sidebar-title { display: none; }
             .sidebar-link { white-space: nowrap; }
             .form-grid { grid-template-columns: 1fr; }
         }
-
         @media (max-width: 768px) {
             .container { padding: 0 1rem; }
             .navbar .container { gap: 1rem; }
@@ -722,13 +318,9 @@
 </head>
 <body>
 
-    <!-- ============================================
-         NAVBAR
-         ============================================ -->
     <nav class="navbar">
         <div class="container">
-           <a href="/" class="logo">𝐍𝐄𝐗𝐔𝐒 <span>𝐒𝐎𝐑𝐆𝐔 𝐕𝐈𝐏</span></a>
-            
+            <a href="/" class="logo">𝐍𝐄𝐗𝐔𝐒 <span>𝐒𝐎𝐑𝐆𝐔 𝐕𝐈𝐏</span></a>
             <div class="nav-tabs">
                 <a href="/" class="nav-tab">
                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -739,7 +331,6 @@
                     API
                 </a>
             </div>
-
             <a href="https://t.me/cmrbaskani" target="_blank" rel="noopener" class="tg-btn">
                 <svg fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
                 @cmrbaskani
@@ -747,13 +338,8 @@
         </div>
     </nav>
 
-    <!-- ============================================
-         MAIN LAYOUT
-         ============================================ -->
     <div class="container">
         <div class="main-layout">
-
-            <!-- SIDEBAR -->
             <aside class="sidebar">
                 <div class="sidebar-section">
                     <div class="sidebar-title">Sorgu Servisleri</div>
@@ -767,27 +353,26 @@
                         Ad Soyad
                         <span class="method-badge method-post">POST</span>
                     </a>
+                    <a class="sidebar-link" data-endpoint="tcprime">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0"/></svg>
+                        TC Sorgu
+                        <span class="method-badge method-get">GET</span>
+                    </a>
+                    <a class="sidebar-link" data-endpoint="sulaleprime">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        Sülale Sorgu
+                        <span class="method-badge method-get">GET</span>
+                    </a>
                 </div>
             </aside>
 
-            <!-- CONTENT -->
-            <main class="content-area" id="contentArea">
-                <!-- Dinamik olarak JS ile doldurulacak -->
-            </main>
-
+            <main class="content-area" id="contentArea"></main>
         </div>
     </div>
 
-    <!-- TOAST CONTAINER -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- ============================================
-         JAVASCRIPT
-         ============================================ -->
     <script>
-        // ============================================
-        // API KONFİGÜRASYONU
-        // ============================================
         const API_CONFIG = {
             aile: {
                 name: "Aile Sorgu",
@@ -798,9 +383,7 @@
                 params: [
                     { name: "tckn", type: "string", required: true, desc: "11 haneli TC Kimlik Numarası", placeholder: "49642035070" }
                 ],
-                example: {
-                    tckn: "49642035070"
-                }
+                example: { tckn: "49642035070" }
             },
             adsoyad: {
                 name: "Ad Soyad Sorgu",
@@ -814,11 +397,29 @@
                     { name: "il", type: "string", required: false, desc: "İl (küçük harf)", placeholder: "van" },
                     { name: "ilce", type: "string", required: false, desc: "İlçe", placeholder: "" }
                 ],
-                example: {
-                    ad: "Burhan",
-                    soyad: "Yıldırım",
-                    il: "van"
-                }
+                example: { ad: "Burhan", soyad: "Yıldırım", il: "van" }
+            },
+            tcprime: {
+                name: "TC Sorgu (Prime)",
+                method: "GET",
+                baseUrl: "https://nexuspanel-t583.onrender.com/tcprime.php",
+                pathTemplate: "?tc={tc}",
+                description: "primechecker.store üzerinden TCKN ile kişinin kimlik, nüfus, anne/baba bilgilerini getirir.",
+                params: [
+                    { name: "tc", type: "string", required: true, desc: "11 haneli TC Kimlik Numarası", placeholder: "11111111110" }
+                ],
+                example: { tc: "11111111110" }
+            },
+            sulaleprime: {
+                name: "Sülale Sorgu (Prime)",
+                method: "GET",
+                baseUrl: "https://nexuspanel-t583.onrender.com/sulaleprime.php",
+                pathTemplate: "?tc={tc}",
+                description: "primechecker.store üzerinden TCKN ile kişinin sülalesini (tüm yakınlarını) listeler.",
+                params: [
+                    { name: "tc", type: "string", required: true, desc: "11 haneli TC Kimlik Numarası", placeholder: "11111111119" }
+                ],
+                example: { tc: "11111111119" }
             }
         };
 
@@ -826,16 +427,10 @@
         let activePanel = 'test';
         let activeCodeLang = 'curl';
 
-        // ============================================
-        // YARDIMCI FONKSİYONLAR
-        // ============================================
         function escapeHtml(str) {
             return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
         function buildUrl(config, values) {
@@ -854,13 +449,9 @@
                 /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
                 (match) => {
                     let cls = 'json-number';
-                    if (/^"/.test(match)) {
-                        cls = /:$/.test(match) ? 'json-key' : 'json-string';
-                    } else if (/true|false/.test(match)) {
-                        cls = 'json-boolean';
-                    } else if (/null/.test(match)) {
-                        cls = 'json-null';
-                    }
+                    if (/^"/.test(match)) cls = /:$/.test(match) ? 'json-key' : 'json-string';
+                    else if (/true|false/.test(match)) cls = 'json-boolean';
+                    else if (/null/.test(match)) cls = 'json-null';
                     return `<span class="${cls}">${match}</span>`;
                 }
             );
@@ -870,7 +461,7 @@
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            const iconSvg = type === 'success' 
+            const iconSvg = type === 'success'
                 ? '<svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>'
                 : '<svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
             toast.innerHTML = iconSvg + `<span>${escapeHtml(message)}</span>`;
@@ -879,23 +470,14 @@
         }
 
         async function copyToClipboard(text) {
-            try {
-                await navigator.clipboard.writeText(text);
-                showToast('Panoya kopyalandı');
-            } catch (e) {
-                showToast('Kopyalama başarısız', 'error');
-            }
+            try { await navigator.clipboard.writeText(text); showToast('Panoya kopyalandı'); }
+            catch (e) { showToast('Kopyalama başarısız', 'error'); }
         }
 
-        // ============================================
-        // RENDER FONKSİYONLARI
-        // ============================================
         function renderPage() {
             const config = API_CONFIG[activeEndpoint];
             const contentArea = document.getElementById('contentArea');
-
             contentArea.innerHTML = `
-                <!-- API HEADER -->
                 <header class="api-header">
                     <div class="api-title-row">
                         <h1>${escapeHtml(config.name)}</h1>
@@ -911,8 +493,6 @@
                         </button>
                     </div>
                 </header>
-
-                <!-- SECTION TABS -->
                 <div class="interactive-section">
                     <div class="section-tabs">
                         <button class="section-tab ${activePanel === 'test' ? 'active' : ''}" onclick="switchPanel('test')">
@@ -928,53 +508,27 @@
                             Kod Örnekleri
                         </button>
                     </div>
-
-                    <!-- PANEL: TEST -->
-                    <div class="panel ${activePanel === 'test' ? 'active' : ''}" id="panel-test">
-                        ${renderTestPanel(config)}
-                    </div>
-
-                    <!-- PANEL: PARAMS -->
-                    <div class="panel ${activePanel === 'params' ? 'active' : ''}" id="panel-params">
-                        ${renderParamsPanel(config)}
-                    </div>
-
-                    <!-- PANEL: CODE -->
-                    <div class="panel ${activePanel === 'code' ? 'active' : ''}" id="panel-code">
-                        ${renderCodePanel(config)}
-                    </div>
+                    <div class="panel ${activePanel === 'test' ? 'active' : ''}" id="panel-test">${renderTestPanel(config)}</div>
+                    <div class="panel ${activePanel === 'params' ? 'active' : ''}" id="panel-params">${renderParamsPanel(config)}</div>
+                    <div class="panel ${activePanel === 'code' ? 'active' : ''}" id="panel-code">${renderCodePanel(config)}</div>
                 </div>
             `;
-
-            if (activePanel === 'code') {
-                renderCodeExample(config, activeCodeLang);
-            }
+            if (activePanel === 'code') renderCodeExample(config, activeCodeLang);
         }
 
         function renderTestPanel(config) {
             const fields = config.params.map(p => `
                 <div class="form-field">
                     <label class="form-label">
-                        ${escapeHtml(p.name)}
-                        ${p.required ? '<span class="required">*</span>' : ''}
+                        ${escapeHtml(p.name)} ${p.required ? '<span class="required">*</span>' : ''}
                         <span class="type-hint">${p.type}${p.required ? ', required' : ', optional'}</span>
                     </label>
-                    <input 
-                        type="text" 
-                        class="form-input" 
-                        id="param-${p.name}" 
-                        name="${p.name}"
-                        placeholder="${escapeHtml(p.placeholder || '')}"
-                        value="${escapeHtml(config.example[p.name] || '')}"
-                    >
-                </div>
-            `).join('');
-
+                    <input type="text" class="form-input" id="param-${p.name}" name="${p.name}"
+                        placeholder="${escapeHtml(p.placeholder || '')}" value="${escapeHtml(config.example[p.name] || '')}">
+                </div>`).join('');
             return `
                 <form class="test-form" onsubmit="executeTest(event)">
-                    <div class="form-grid">
-                        ${fields}
-                    </div>
+                    <div class="form-grid">${fields}</div>
                     <div class="form-actions">
                         <button type="button" class="btn" onclick="resetForm()">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
@@ -986,7 +540,6 @@
                         </button>
                     </div>
                 </form>
-
                 <div class="console-wrap">
                     <div class="console-header">
                         <div class="console-status">
@@ -998,34 +551,21 @@
                     <div class="console-body" id="consoleBody">
                         <span style="color: var(--text-dim);">// API cevabı burada görünecek...</span>
                     </div>
-                </div>
-            `;
+                </div>`;
         }
 
         function renderParamsPanel(config) {
             const rows = config.params.map(p => `
                 <tr>
-                    <td>
-                        <span class="param-name">${escapeHtml(p.name)}</span>
-                        ${p.required ? '<span class="param-required">Gerekli</span>' : ''}
-                    </td>
+                    <td><span class="param-name">${escapeHtml(p.name)}</span>${p.required ? '<span class="param-required">Gerekli</span>' : ''}</td>
                     <td><span class="param-type">${escapeHtml(p.type)}</span></td>
                     <td class="param-desc">${escapeHtml(p.desc)}</td>
-                </tr>
-            `).join('');
-
+                </tr>`).join('');
             return `
                 <table class="params-table">
-                    <thead>
-                        <tr>
-                            <th>Parametre</th>
-                            <th>Tip</th>
-                            <th>Açıklama</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Parametre</th><th>Tip</th><th>Açıklama</th></tr></thead>
                     <tbody>${rows}</tbody>
-                </table>
-            `;
+                </table>`;
         }
 
         function renderCodePanel(config) {
@@ -1036,88 +576,70 @@
                 { id: 'php', label: 'PHP' }
             ];
             const tabs = langs.map(l => `
-                <button class="code-tab ${activeCodeLang === l.id ? 'active' : ''}" onclick="switchCodeLang('${l.id}')">
-                    ${l.label}
-                </button>
+                <button class="code-tab ${activeCodeLang === l.id ? 'active' : ''}" onclick="switchCodeLang('${l.id}')">${l.label}</button>
             `).join('');
-
             return `
                 <div style="margin: -1.75rem; margin-bottom: 0;">
                     <div class="code-tabs">${tabs}</div>
                     <div id="codeExample"></div>
-                </div>
-            `;
+                </div>`;
         }
 
         function renderCodeExample(config, lang) {
             const example = config.example;
             const container = document.getElementById('codeExample');
             if (!container) return;
-
             let code = '';
             const url = buildUrl(config, example);
-
             if (lang === 'curl') {
                 if (config.method === 'GET') {
-                    code = `<span class="cm"># ${config.name}</span>\n<span class="fn">curl</span> <span class="str">"${url}"</span> \\\n  -H <span class="str">"Accept: application/json"</span> \\\n  -H <span class="str">"User-Agent: Mozilla/5.0"</span>`;
+                    code = `<span class="cm"># ${config.name}</span>\n<span class="fn">curl</span> <span class="str">"${url}"</span>`;
                 } else {
                     const body = Object.entries(example).map(([k, v]) => `--data-urlencode <span class="str">"${k}=${v}"</span>`).join(' \\\n  ');
-                    code = `<span class="cm"># ${config.name}</span>\n<span class="fn">curl</span> -X POST <span class="str">"${config.baseUrl}"</span> \\\n  -H <span class="str">"Content-Type: application/x-www-form-urlencoded"</span> \\\n  ${body}`;
+                    code = `<span class="cm"># ${config.name}</span>\n<span class="fn">curl</span> -X POST <span class="str">"${config.baseUrl}"</span> \\\n  ${body}`;
                 }
             } else if (lang === 'js') {
                 if (config.method === 'GET') {
-                    code = `<span class="cm">// ${config.name}</span>\n<span class="kw">const</span> response = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"${url}"</span>, {\n  headers: { <span class="str">"Accept"</span>: <span class="str">"application/json"</span> }\n});\n<span class="kw">const</span> data = <span class="kw">await</span> response.<span class="fn">json</span>();\nconsole.<span class="fn">log</span>(data);`;
+                    code = `<span class="cm">// ${config.name}</span>\n<span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"${url}"</span>);\n<span class="kw">const</span> data = <span class="kw">await</span> res.<span class="fn">json</span>();`;
                 } else {
                     const body = new URLSearchParams(example).toString();
-                    code = `<span class="cm">// ${config.name}</span>\n<span class="kw">const</span> response = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"${config.baseUrl}"</span>, {\n  method: <span class="str">"POST"</span>,\n  headers: { <span class="str">"Content-Type"</span>: <span class="str">"application/x-www-form-urlencoded"</span> },\n  body: <span class="str">"${body}"</span>\n});\n<span class="kw">const</span> data = <span class="kw">await</span> response.<span class="fn">json</span>();\nconsole.<span class="fn">log</span>(data);`;
+                    code = `<span class="cm">// ${config.name}</span>\n<span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"${config.baseUrl}"</span>, {\n  method: <span class="str">"POST"</span>,\n  body: <span class="str">"${body}"</span>\n});`;
                 }
             } else if (lang === 'python') {
-                code = `<span class="kw">import</span> requests\n\n<span class="cm"># ${config.name}</span>\n`;
-                if (config.method === 'GET') {
-                    code += `response = requests.<span class="fn">get</span>(<span class="str">"${config.baseUrl}"</span>, params=${JSON.stringify(example, null, 2)})\n`;
-                } else {
-                    code += `response = requests.<span class="fn">post</span>(<span class="str">"${config.baseUrl}"</span>, data=${JSON.stringify(example, null, 2)})\n`;
-                }
-                code += `data = response.<span class="fn">json</span>()\n<span class="fn">print</span>(data)`;
+                code = `<span class="kw">import</span> requests\n`;
+                code += config.method === 'GET'
+                    ? `r = requests.<span class="fn">get</span>(<span class="str">"${url}"</span>)\n`
+                    : `r = requests.<span class="fn">post</span>(<span class="str">"${config.baseUrl}"</span>, data=${JSON.stringify(example)})\n`;
+                code += `data = r.<span class="fn">json</span>(); <span class="fn">print</span>(data)`;
             } else if (lang === 'php') {
-                code = `<span class="cm">&lt;?php\n// ${config.name}</span>\n`;
-                code += `$url = <span class="str">"${config.method === 'GET' ? url : config.baseUrl}"</span>;\n`;
-                code += `$ch = curl_init($url);\n`;
+                code = `<span class="cm">&lt;?php</span>\n`;
+                code += `$ch = curl_init(<span class="str">"${config.method === 'GET' ? url : config.baseUrl}"</span>);\n`;
                 code += `curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="kw">true</span>);\n`;
                 if (config.method === 'POST') {
-                    code += `curl_setopt($ch, CURLOPT_POST, <span class="kw">true</span>);\n`;
-                    code += `curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(${JSON.stringify(example, null, 2)}));\n`;
+                    code += `curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(${JSON.stringify(example)}));\n`;
                 }
-                code += `$response = curl_exec($ch);\ncurl_close($ch);\n$data = json_decode($response, <span class="kw">true</span>);\n<span class="fn">print_r</span>($data);`;
+                code += `$r = curl_exec($ch); curl_close($ch);\n<span class="fn">print_r</span>(json_decode($r, <span class="kw">true</span>));`;
             }
-
             container.innerHTML = `<pre class="code-block active">${code}</pre>`;
         }
 
-        // ============================================
-        // ETKİLEŞİM FONKSİYONLARI
-        // ============================================
         function switchPanel(panelName) {
             activePanel = panelName;
-            document.querySelectorAll('.section-tab').forEach((t, i) => {
-                const map = ['test', 'params', 'code'];
-                t.classList.toggle('active', map[i] === panelName);
-            });
-            document.querySelectorAll('.panel').forEach(p => {
-                p.classList.toggle('active', p.id === `panel-${panelName}`);
-            });
-            if (panelName === 'code') {
-                renderCodeExample(API_CONFIG[activeEndpoint], activeCodeLang);
-            }
+            const map = ['test', 'params', 'code'];
+            document.querySelectorAll('.section-tab').forEach((t, i) => t.classList.toggle('active', map[i] === panelName));
+            document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === `panel-${panelName}`));
+            if (panelName === 'code') renderCodeExample(API_CONFIG[activeEndpoint], activeCodeLang);
         }
 
         function switchCodeLang(lang) {
             activeCodeLang = lang;
             document.querySelectorAll('.code-tab').forEach(t => {
-                t.classList.toggle('active', t.textContent.trim().toLowerCase() === lang.toLowerCase() || 
-                    (lang === 'js' && t.textContent.trim() === 'JavaScript') ||
-                    (lang === 'python' && t.textContent.trim() === 'Python') ||
-                    (lang === 'php' && t.textContent.trim() === 'PHP'));
+                const txt = t.textContent.trim();
+                t.classList.toggle('active',
+                    txt.toLowerCase() === lang.toLowerCase() ||
+                    (lang === 'js' && txt === 'JavaScript') ||
+                    (lang === 'python' && txt === 'Python') ||
+                    (lang === 'php' && txt === 'PHP'));
             });
             renderCodeExample(API_CONFIG[activeEndpoint], lang);
         }
@@ -1137,94 +659,59 @@
         async function executeTest(event) {
             event.preventDefault();
             const config = API_CONFIG[activeEndpoint];
-            
-            // Değerleri topla
             const values = {};
             config.params.forEach(p => {
                 const input = document.getElementById(`param-${p.name}`);
                 if (input) values[p.name] = input.value.trim();
             });
-
-            // Zorunlu alan kontrolü
             for (const p of config.params) {
-                if (p.required && !values[p.name]) {
-                    showToast(`${p.name} alanı zorunlu`, 'error');
-                    return;
-                }
+                if (p.required && !values[p.name]) { showToast(`${p.name} alanı zorunlu`, 'error'); return; }
             }
-
-            // UI loading durumu
             const statusDot = document.getElementById('statusDot');
             const statusText = document.getElementById('statusText');
             const consoleBody = document.getElementById('consoleBody');
             const responseTime = document.getElementById('responseTime');
-
             statusDot.className = 'status-dot loading';
             statusText.textContent = 'İstek gönderiliyor...';
             consoleBody.innerHTML = '<span style="color: var(--gold);">// Yükleniyor...</span>';
             responseTime.textContent = '';
-
             const startTime = performance.now();
-
             try {
                 let response;
                 if (config.method === 'GET') {
                     const url = buildUrl(config, values);
-                    response = await fetch(url, {
-                        headers: { 
-                            'Accept': 'application/json, text/javascript, */*; q=0.01',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    });
+                    response = await fetch(url, { headers: { 'Accept': 'application/json' } });
                 } else {
                     const body = new URLSearchParams(values).toString();
                     response = await fetch(config.baseUrl, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                            'Accept': 'application/json, text/javascript, */*; q=0.01',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'Accept': 'application/json' },
                         body: body
                     });
                 }
-
                 const elapsed = (performance.now() - startTime).toFixed(1);
                 const text = await response.text();
-                
-                // JSON formatla
                 let formatted;
-                try {
-                    const json = JSON.parse(text);
-                    formatted = highlightJson(JSON.stringify(json, null, 2));
-                } catch {
-                    formatted = escapeHtml(text);
-                }
-
+                try { formatted = highlightJson(JSON.stringify(JSON.parse(text), null, 2)); }
+                catch { formatted = escapeHtml(text); }
                 if (response.ok) {
                     statusDot.className = 'status-dot success';
                     statusText.textContent = `Başarılı — HTTP ${response.status}`;
-                    responseTime.textContent = `${elapsed}ms`;
                 } else {
                     statusDot.className = 'status-dot error';
                     statusText.textContent = `Hata — HTTP ${response.status}`;
-                    responseTime.textContent = `${elapsed}ms`;
                 }
-                
+                responseTime.textContent = `${elapsed}ms`;
                 consoleBody.innerHTML = formatted;
-
             } catch (err) {
                 const elapsed = (performance.now() - startTime).toFixed(1);
                 statusDot.className = 'status-dot error';
                 statusText.textContent = 'Bağlantı Hatası';
                 responseTime.textContent = `${elapsed}ms`;
-                consoleBody.innerHTML = `<span style="color: var(--red);">// Hata: ${escapeHtml(err.message)}\n\n// Not: CORS veya ağ hatası olabilir. Gerçek kullanımda bu istek kendi backend sunucunuz üzerinden yapılmalıdır.</span>`;
+                consoleBody.innerHTML = `<span style="color: var(--red);">// Hata: ${escapeHtml(err.message)}</span>`;
             }
         }
 
-        // ============================================
-        // SIDEBAR NAVIGASYON
-        // ============================================
         document.querySelectorAll('.sidebar-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -1235,9 +722,6 @@
             });
         });
 
-        // ============================================
-        // BAŞLAT
-        // ============================================
         renderPage();
     </script>
 </body>
