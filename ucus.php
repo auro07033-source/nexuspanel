@@ -1,63 +1,79 @@
 <?php
-// dhmi.php - DHMİ canlı uçuş bilgisi proxy
+// ucus.php - DHMİ canlı uçuş bilgisi
 // Kullanım:
-//   ?airport=2&type=DA&dir=D    → İstanbul Atatürk Kalkış
-//   ?airport=2&type=DA&dir=A    → İstanbul Atatürk Varış
-//   ?airport=1&type=IC&dir=D    → İstanbul Havalimanı (IST) Kalkış
+//   ?airport=2&da=DD&i=D    → İstanbul Sabiha Gökçen, Gidiş, İç Hat
+//   ?airport=1&da=DA&i=I    → İstanbul Havalimanı, Geliş, Dış Hat
 
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 
-$BASE = "https://flightwebsvc.dhmi.gov.tr";
+$BASE_PAGE = "https://www.dhmi.gov.tr/Sayfalar/TumUcuslar.aspx";
+$BASE_API = "https://flightwebsvc.dhmi.gov.tr";
 $UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36";
 
 $airport = $_GET['airport'] ?? '2';
-$type = $_GET['type'] ?? 'DA';
-$dir = $_GET['dir'] ?? 'D';
+$da = strtoupper($_GET['da'] ?? 'DD');  // DA = Geliş, DD = Gidiş
+$i = strtoupper($_GET['i'] ?? 'D');     // D = İç Hat, I = Dış Hat
 
-// Geçerli değerler
-if (!in_array($dir, ['D', 'A'])) {
-    echo json_encode(["success" => false, "message" => "dir D veya A olmalı"]);
+// Doğrulama
+if (!in_array($da, ['DA', 'DD'])) {
+    echo json_encode(["success" => false, "message" => "da: DA veya DD olmalı"]);
+    exit;
+}
+if (!in_array($i, ['D', 'I'])) {
+    echo json_encode(["success" => false, "message" => "i: D veya I olmalı"]);
     exit;
 }
 
-// KToken almak için önce ana sayfaya git
-$cookieFile = sys_get_temp_dir() . "/dhmi_" . md5(uniqid()) . ".txt";
+$cf = sys_get_temp_dir() . "/dhmi_" . md5(uniqid()) . ".txt";
 
-$ch = curl_init("https://www.dhmi.gov.tr/Sayfalar/ucus-bilgileri.aspx");
+// 1. Ana sayfaya git (KToken ve cookie için)
+$ch = curl_init($BASE_PAGE);
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_COOKIEJAR => $cookieFile,
-    CURLOPT_COOKIEFILE => $cookieFile,
-    CURLOPT_TIMEOUT => 20,
+    CURLOPT_COOKIEJAR => $cf,
+    CURLOPT_COOKIEFILE => $cf,
+    CURLOPT_TIMEOUT => 25,
     CURLOPT_SSL_VERIFYPEER => false,
     CURLOPT_FOLLOWLOCATION => true,
     CURLOPT_ENCODING => "",
     CURLOPT_USERAGENT => $UA,
     CURLOPT_HTTPHEADER => [
-        "Accept: text/html,application/xhtml+xml",
+        "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Accept-Language: tr-TR,tr;q=0.9",
         "Upgrade-Insecure-Requests: 1"
     ],
 ]);
 $html = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$err = curl_error($ch);
 curl_close($ch);
 
-if ($httpCode !== 200) {
-    @unlink($cookieFile);
-    echo json_encode(["success" => false, "message" => "Ana sayfa: HTTP $httpCode"]);
+if ($err) {
+    @unlink($cf);
+    echo json_encode(["success" => false, "message" => "cURL: $err"]);
     exit;
 }
 
-// HTML'den KToken çıkar
+if ($httpCode !== 200) {
+    @unlink($cf);
+    echo json_encode([
+        "success" => false,
+        "message" => "Ana sayfa HTTP $httpCode",
+        "tried_url" => $BASE_PAGE
+    ]);
+    exit;
+}
+
+// 2. KToken çıkar
 $kToken = null;
 
-// Farklı pattern'ler
+// Pattern: <input ... name="...$Ktoken" ... value="..." />
 $patterns = [
-    '/["\']KToken["\']\s*[:=]\s*["\']([^"\']+)["\']/i',
-    '/KToken\s*:\s*["\']([^"\']+)["\']/i',
-    '/headers\s*:\s*\{[^}]*["\']KToken["\']\s*:\s*["\']([^"\']+)["\']/i',
+    '/name="[^"]*\$Ktoken"\s+id="Ktoken"\s+value="([^"]+)"/i',
+    '/id="Ktoken"\s+name="[^"]*\$Ktoken"\s+value="([^"]+)"/i',
+    '/name="[^"]*\$Ktoken"[^>]*value="([^"]+)"/i',
+    '/Ktoken["\']?\s*[:=]\s*["\']([^"\']+)["\']/i',
 ];
 
 foreach ($patterns as $pattern) {
@@ -67,53 +83,26 @@ foreach ($patterns as $pattern) {
     }
 }
 
-// Bulunamazsa, ana sayfa URL'sinin sonuna bir API çağrısı yaparak da alınabilir
 if (!$kToken) {
-    // Yedek: DHMİ'nin kendi script'lerini kontrol et
-    if (preg_match('/<script[^>]*src="([^"]*ucus[^"]*\.js[^"]*)"/i', $html, $m)) {
-        $jsUrl = $m[1];
-        if (strpos($jsUrl, "http") !== 0) {
-            $jsUrl = "https://www.dhmi.gov.tr" . (strpos($jsUrl, "/") === 0 ? "" : "/") . $jsUrl;
-        }
-        
-        $ch = curl_init($jsUrl);
-        curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 15,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_USERAGENT => $UA,
-        ]);
-        $js = curl_exec($ch);
-        curl_close($ch);
-        
-        foreach ($patterns as $pattern) {
-            if (preg_match($pattern, $js, $m)) {
-                $kToken = $m[1];
-                break;
-            }
-        }
-    }
-}
-
-if (!$kToken) {
-    @unlink($cookieFile);
+    @unlink($cf);
     echo json_encode([
         "success" => false,
         "message" => "KToken bulunamadı",
         "html_length" => strlen($html),
-        "debug" => "İlk 500: " . substr(strip_tags($html), 0, 500)
+        "debug" => "İlk 300: " . substr(strip_tags($html), 0, 300)
     ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     exit;
 }
 
-// API isteği
-$url = "$BASE/api/Flights/$airport/$type/$dir";
-$ch = curl_init($url);
+// 3. API'ye istek at
+$apiUrl = "$BASE_API/api/Flights/$airport/$da/$i";
+
+$ch = curl_init($apiUrl);
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_COOKIEJAR => $cookieFile,
-    CURLOPT_COOKIEFILE => $cookieFile,
-    CURLOPT_TIMEOUT => 20,
+    CURLOPT_COOKIEJAR => $cf,
+    CURLOPT_COOKIEFILE => $cf,
+    CURLOPT_TIMEOUT => 25,
     CURLOPT_SSL_VERIFYPEER => false,
     CURLOPT_FOLLOWLOCATION => true,
     CURLOPT_ENCODING => "",
@@ -123,7 +112,7 @@ curl_setopt_array($ch, [
         "Accept-Language: tr-TR,tr;q=0.9",
         "KToken: $kToken",
         "X-Requested-With: XMLHttpRequest",
-        "Referer: https://www.dhmi.gov.tr/Sayfalar/ucus-bilgileri.aspx",
+        "Referer: $BASE_PAGE",
         "Origin: https://www.dhmi.gov.tr"
     ],
 ]);
@@ -131,7 +120,7 @@ $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $err = curl_error($ch);
 curl_close($ch);
-@unlink($cookieFile);
+@unlink($cf);
 
 if ($err) {
     echo json_encode(["success" => false, "message" => "cURL: $err"]);
@@ -141,9 +130,10 @@ if ($err) {
 if ($httpCode !== 200) {
     echo json_encode([
         "success" => false,
-        "message" => "HTTP $httpCode",
-        "raw" => substr($response, 0, 300)
-    ]);
+        "message" => "API HTTP $httpCode",
+        "url" => $apiUrl,
+        "raw" => substr($response, 0, 500)
+    ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     exit;
 }
 
@@ -157,12 +147,28 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     exit;
 }
 
+// Uçuşları Türkçe alanlarla map'le
+$flights = [];
+foreach ((array)$data as $f) {
+    $flights[] = [
+        "ucus_no"     => $f['Number'] ?? '',
+        "tarih"       => $f['Date'] ?? '',
+        "havayolu"    => $f['Airline'] ?? '',
+        "yer"         => $f['SrcDst'] ?? '',
+        "planlanan"   => $f['Planned'] ?? '',
+        "tahmini"     => $f['Estimated'] ?? '',
+        "bagaj_alim"  => $f['Gate'] ?? '',
+        "durum"       => $f['Status'] ?? '',
+        "renk"        => $f['ColorCode'] ?? '',
+        "aktif"       => $f['Active'] ?? 0
+    ];
+}
+
 echo json_encode([
     "success" => true,
     "airport" => $airport,
-    "type" => $type,
-    "direction" => $dir,
-    "kToken_used" => substr($kToken, 0, 30) . "...",
-    "flight_count" => is_array($data) ? count($data) : 0,
-    "flights" => $data
+    "da" => $da,       // DA=Geliş, DD=Gidiş
+    "i" => $i,         // D=İç Hat, I=Dış Hat
+    "count" => count($flights),
+    "flights" => $flights
 ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
